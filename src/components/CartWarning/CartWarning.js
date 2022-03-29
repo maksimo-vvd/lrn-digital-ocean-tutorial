@@ -4,15 +4,11 @@ import {createUseStyles} from "react-jss";
 
 const useStyles = createUseStyles({
   'd-flex': {
-  display: 'flex',
+    display: 'flex',
   },
   item: {},
-  // item: {
-  //   marginRight: 20,
-  //   marginBottom: 20,
-  // },
   wrapper: {
-    borderTop: 'black dashed 2px',
+    borderTop: 'orange dashed 2px',
     paddingTop: 20,
     display: 'flex',
     flexWrap: 'wrap',
@@ -31,7 +27,7 @@ export default function CartSuccess() {
   const classes = useStyles();
 
   return(
-    <Alert title="Added to Cart" type="success">
+    <Alert title="Warning! Item will add to Cart" type="warning">
       <div className={classes.wrapper}>
         <h2>
           You have added 3 items:
