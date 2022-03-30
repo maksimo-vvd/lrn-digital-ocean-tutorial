@@ -1,0 +1,31 @@
+.section {
+    display: flex;
+    text-align: center;
+}
+.product-holder {
+    background: lightgray;
+    margin: 10px;
+    padding: 10px;
+}
+.product {
+    width: 140px;
+    height: 140px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+.product span {
+    font-size: 80px;
+}
+
+.wrapper {
+    padding: 20px;
+    font-size: 20px;
+}
+
+.wrapper button {
+    font-size: 20px;
+    background: none;
+    margin: 0 5px;
+}
