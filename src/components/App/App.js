@@ -1,8 +1,22 @@
 import React from 'react';
-import Product from "../Product/Product";
+
+import Navigation from "../Navigation/Navigation";
+import SaladMaker from "../SaladMaker/SaladMaker";
+
+import UserContext from "../User/User";
+
+const user = {
+  name: 'Dev1',
+  favorites: ['avocado', 'carrot']
+}
 
 function App() {
-  return <Product />
+  return (
+    <UserContext.Provider value={user}>
+      <Navigation />
+      <SaladMaker />
+    </UserContext.Provider>
+  )
 }
 
 export default App;
