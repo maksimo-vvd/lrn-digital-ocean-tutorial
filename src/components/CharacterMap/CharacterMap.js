@@ -1,4 +1,4 @@
-import React, {useContext} from "react"
+import React, {memo, useContext} from "react"
 import PropTypes from "prop-types"
 import { TextContext } from "../App/App"
 
@@ -39,4 +39,4 @@ CharacterMap.propTypes = {
   show: PropTypes.bool.isRequired
 }
 
-export default CharacterMap
+export default memo(CharacterMap)
