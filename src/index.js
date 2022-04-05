@@ -4,8 +4,21 @@ import './index.css';
 import App from './components/App/App';
 // import reportWebVitals from './reportWebVitals';
 
+import { createGlobalStyle } from "styled-components";
+
+const Global = createGlobalStyle`
+  * {box-sizing: border-box;}
+  body {
+    margin: 0;
+    color: #ECC488;
+    background-color: #B667F1;
+    background-color: #8A39E1;
+  }
+`
+
 ReactDOM.render(
   <React.StrictMode>
+    <Global />
     <App />
   </React.StrictMode>,
   document.getElementById('root')
