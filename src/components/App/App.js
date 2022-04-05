@@ -20,24 +20,41 @@ const Title = styled.h1`
 `
 
 const formReducer = ( state, event ) => {
-  const isCheckbox = event.target.type === 'checkbox'
-  console.log('form Reducer: ', isCheckbox)
+  // const isCheckbox = event.target.type === 'checkbox'
+
+  if (event.reset) {
+    return {
+      apple: '',
+      count: 0,
+      name: '',
+      'gift-wrap': false,
+    }
+  }
+
   return {
     ...state,
-    [event.target.name]: isCheckbox ? event.target.checked : event.target.value,
-    // [event.name]: event.value,
+    // [event.target.name]: isCheckbox ? event.target.checked : event.target.value,
+    [event.name]: event.value,
   }
 }
 
 function App() {
-  const [formData, setFormData] = useReducer(formReducer, {})
+  const [formData, setFormData] = useReducer(formReducer, {
+    count: 100,
+    apple: 'jonathan',
+  })
   const [submitting, setSubmitting] = useState(false)
 
   const handleSubmit = event => {
     event.preventDefault()
     setSubmitting(true)
 
-    setTimeout(() => setSubmitting(false), 3000)
+    setTimeout(() => {
+      setSubmitting(false)
+      setFormData({
+        reset: true
+      })
+    }, 3000)
   }
 
   const handleChange = event => {
@@ -56,7 +73,6 @@ function App() {
           You are Submitting the following:
           <ul>
             {Object.entries(formData).map(([name, value]) => {
-              console.log(45454, name, value)
               return <li key={ name }> <b>{ name }</b>: { value.toString() } </li>
             } )}
           </ul>
@@ -69,9 +85,10 @@ function App() {
             <p>Name</p>
             <input
               name="name"
-              // onChange={ handleChange }
-              onChange={ setFormData }
+              onChange={ handleChange }
+              // onChange={ setFormData }
               autoComplete="off"
+              value={ formData.name || '' }
             />
           </label>
         </FormFieldset>
@@ -81,8 +98,9 @@ function App() {
             <p>Apples</p>
             <select
               name="apple"
-              // onChange={ handleChange }
-              onChange={ setFormData }
+              onChange={ handleChange }
+              // onChange={ setFormData }
+              value={ formData.apple || '' }
             >
               <option value="">--Please choose an option--</option>
               <option value="fuji">Fuji</option>
@@ -96,9 +114,10 @@ function App() {
             <input
               type="number"
               name="count"
-              // onChange={ handleChange }
-              onChange={ setFormData }
-              step="1"
+              onChange={ handleChange }
+              // onChange={ setFormData }
+              step="10"
+              value={ formData.count || '' }
             />
           </label>
 
@@ -107,8 +126,9 @@ function App() {
             <input
               type="checkbox"
               name="gift-wrap"
-              // onChange={ handleChange }
-              onChange={ setFormData }
+              onChange={ handleChange }
+              // onChange={ setFormData }
+              checked={ formData['gift-wrap'] || false}
             />
           </label>
         </FormFieldset>
