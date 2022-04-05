@@ -20,8 +20,6 @@ const Title = styled.h1`
 `
 
 const formReducer = ( state, event ) => {
-  // const isCheckbox = event.target.type === 'checkbox'
-
   if (event.reset) {
     return {
       apple: '',
@@ -33,7 +31,6 @@ const formReducer = ( state, event ) => {
 
   return {
     ...state,
-    // [event.target.name]: isCheckbox ? event.target.checked : event.target.value,
     [event.name]: event.value,
   }
 }
@@ -80,26 +77,24 @@ function App() {
       }
 
       <form onSubmit={ handleSubmit }>
-        <FormFieldset>
+        <FormFieldset disabled={ submitting }>
           <label>
             <p>Name</p>
             <input
               name="name"
               onChange={ handleChange }
-              // onChange={ setFormData }
               autoComplete="off"
               value={ formData.name || '' }
             />
           </label>
         </FormFieldset>
 
-        <FormFieldset>
+        <FormFieldset disabled={ submitting }>
           <label>
             <p>Apples</p>
             <select
               name="apple"
               onChange={ handleChange }
-              // onChange={ setFormData }
               value={ formData.apple || '' }
             >
               <option value="">--Please choose an option--</option>
@@ -115,7 +110,6 @@ function App() {
               type="number"
               name="count"
               onChange={ handleChange }
-              // onChange={ setFormData }
               step="10"
               value={ formData.count || '' }
             />
@@ -127,13 +121,13 @@ function App() {
               type="checkbox"
               name="gift-wrap"
               onChange={ handleChange }
-              // onChange={ setFormData }
-              checked={ formData['gift-wrap'] || false}
+              checked={ formData['gift-wrap'] || false }
+              disabled={ formData.apple !== 'fuji' }
             />
           </label>
         </FormFieldset>
 
-        <button type="submit">Submit</button>
+        <button type="submit" disabled={ submitting }>Submit</button>
       </form>
     </AppWrapper>
   )
