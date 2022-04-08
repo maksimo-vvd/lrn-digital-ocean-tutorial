@@ -6,10 +6,16 @@ function RiverInformation({ name }) {
   const [riverInformation, setRiverInformation] = useState()
 
   useEffect(() => {
+    let mounted = true
     getRiverInformation(name)
-      .then(data =>
-        setRiverInformation(data)
-      )
+      .then(data => {
+        if (mounted) {
+          setRiverInformation(data)
+        }
+      })
+    return () => {
+      mounted = false
+    }
   }, [name])
 
   return (

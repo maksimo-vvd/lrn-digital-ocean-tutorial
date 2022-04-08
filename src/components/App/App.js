@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useReducer, useState} from 'react'
 
 import styled from "styled-components"
 
@@ -21,17 +21,24 @@ const Title = styled.h1`
 `
 
 function App() {
-  const [river, setRiver] = useState('amazon')
+  const [river, setRiver] = useState('nile')
+  const [show, toggle] = useReducer( state => !state, true)
   return (
     <AppWrapper>
       <Title>World's Longest Rivers</Title>
+
+      <div>
+        <Button onClick={ toggle }>Toggle Details</Button>
+      </div>
 
       <Button onClick={() => setRiver('nile')}>Nile</Button>
       <Button onClick={() => setRiver('amazon')}>Amazon</Button>
       <Button onClick={() => setRiver('yangtze')}>Yangtze</Button>
       <Button onClick={() => setRiver('mississippi')}>Mississippi</Button>
 
-      <RiverInformation name={river} />
+      { show &&
+        <RiverInformation name={river}/>
+      }
     </AppWrapper>
   )
 }

@@ -38,6 +38,6 @@ export function getRiverInformation(name) {
       resolve(
         rivers[name]
       )
-    }, 800)
+    }, 1500)
   })
 }
