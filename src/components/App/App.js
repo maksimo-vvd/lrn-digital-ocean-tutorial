@@ -1,8 +1,8 @@
-import React, {useEffect, useRef, useReducer, useState} from 'react'
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components"
-
-import { getList, setItem } from "../../services/list"
+import {addMovie, incrementMovie, decrementMovie} from "../../store/movies/movies";
 
 const AppWrapper = styled.section`
   max-width: 800px;
@@ -14,98 +14,136 @@ const Button = styled.button`
   min-width: 100px;
   padding: 5px 8px;
 `
-const TextInput = styled.input`
-  margin: 10px; 
-  min-width: 100px;
-  padding: 5px 8px;
-`
 const Title = styled.h1`
   text-align:center;
   font-size: 2rem;
   color: #ECC488;
 `
+const Title2 = styled.h2`
+  text-align:center;
+  font-size: 1.75rem;
+  color: #ECC488;
+`
+const ListTitle = styled.h3`
+  font-size: 1.5rem;
+  margin-top: 0;
+`
+const List = styled.ul`
+  list-style: none;
+  padding-left: 0;
+`
+const Listitem = styled.li`
+  background-color: #B667F1;
+  padding: 1rem;
+  cursor: pointer;
+  
+  &:nth-child(2n) {
+    background-color: #9C51E0;
+  }
+  
+  :hover {
+    background-color: transparent;
+    box-shadow: inset 0 0 0 5px #ECC488; 
+    color: #fff;
+    
+    mark {
+        color: #fff;
+    }
+  }
+  
+  
+`
+const ListViewBox = styled.mark`
+  color: #ECC488;
+  text-align:center;
+  font-size: 0.825rem;
+  background-color: purple;
+  border-radius: 50%;
+  width: 40px;
+  line-height: 40px;
+  display: inline-block;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+`
+const AddForm = styled.form`
+  input[type="text"] {
+    margin: 10px; 
+    width: calc(100% - 20px);
+    padding: 5px 8px;
+  }
+  button[type="submit"] {
+    width: 200px;
+    display: block;
+    margin: 0 auto;
+  }
+`
 
 function App() {
-  const [alert, setAlert] = useState(false)
-  const [animalInput, setAnimalInput] = useState('')
-  const [list, setList] = useState([])
-  // let mounted = true
-  const mounted = useRef(true)
+  const [movieName, setMovie] = useState('')
+  // const movies = useSelector(state => state.movies)
+  const movies = [...useSelector(state => state.movies)].sort((a, b) => {
+    return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1;
+  });
+  const dispatch = useDispatch()
 
-  useEffect(() => {
-    mounted.current = true
-    if (list.length && !alert) {
-      return
-    }
-    getList()
-      .then(items => {
-        if (mounted || mounted.current ) {
-          setList(items)
-        }
-      })
-    // return () => mounted = false
-    return () => mounted.current = false
-  }, [alert, list])
-
-  useEffect(() => {
-    if (alert) {
-      setTimeout(() => {
-        if (mounted || mounted.current) {
-          setAlert(false)
-        }
-      }, 1000)
-    }
-  }, [alert])
-
-  const handleSubmit = e => {
-    e.preventDefault()
-    setItem(animalInput).then(() => {
-      if (mounted || mounted.current) {
-        setAnimalInput('')
-        setAlert(true)
-      }
-    })
+  const handleSubmit = event => {
+    event.preventDefault()
+    dispatch(addMovie(movieName))
+    setMovie('')
   }
 
   return (
     <AppWrapper>
       <dl>
         <p>
-          <dt><kbd>npm i</kbd></dt>
-          <dd> - for install the new dependencies</dd>
+          <dt>Step 1</dt>
+          <dd>For install the new dependencies</dd>
+          <dd><mark><kbd>&#10074; npm i</kbd></mark></dd>
         </p>
-        <p>
-          <dt><kbd>npm start</kbd></dt>
+        <p hidden>
+          <dt>Step 2</dt>
           <dd>First terminal</dd>
-        </p>
-        <p>
-          <dt><kbd>npm api</kbd></dt>
-          <dd>Second terminal</dd>
+          <dd><mark><kbd>&#10074; npm start</kbd></mark></dd>
         </p>
       </dl>
 
-      <Title>World's Animals</Title>
+      <Title>Manage State in React with Redux</Title>
+      <Title2>Movies List</Title2>
 
-      <form onSubmit={handleSubmit}>
+      <AddForm onSubmit={ handleSubmit }>
         <fieldset>
+          <legend>Add movie Form</legend>
           <label>
-            <h2>Add the New animal</h2>
-            {!alert && <p><mark>{ animalInput }</mark></p>}
-            {alert && <p><mark>Submit Successfully</mark></p>}
-            <TextInput
+            <p>Add movie</p>
+            <input
               type="text"
-              value={animalInput}
-              onInput={event => setAnimalInput(event.target.value)}
+              value={movieName}
+              onChange={event => setMovie(event.target.value)}
             />
           </label>
-
-          <Button type="submit">Toggle Details</Button>
+          <div>
+            <Button type="submit">Add</Button>
+          </div>
         </fieldset>
-      </form>
+      </AddForm>
 
-      <ul>
-        {list.map(item => <li key={`{item.item}-${item.id}`}>{item.item}</li>)}
-      </ul>
+      <List>
+        {movies.map(movie => (
+          <Listitem key={movie.name}>
+            <ListTitle>{movie.name}</ListTitle>
+
+            Views: <ListViewBox>{movie.views}</ListViewBox>
+
+            <button onClick={() => dispatch(decrementMovie(movie.name))}>
+              <span role="img" aria-label="add">-</span>
+            </button>
+
+            <button onClick={() => dispatch(incrementMovie(movie.name))}>
+              <span role="img" aria-label="add">+</span>
+            </button>
+          </Listitem>
+        ))}
+      </List>
     </AppWrapper>
   )
 }
