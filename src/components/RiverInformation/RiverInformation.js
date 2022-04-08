@@ -5,6 +5,11 @@ import { getRiverInformation } from "../../services/rivers"
 function RiverInformation({ name }) {
   const [riverInformation, setRiverInformation] = useState()
 
+  // const riverInfo = async () => {
+  //   const response = await getRiverInformation(name)
+  //   setRiverInformation(response)
+  // }
+
   useEffect(() => {
     let mounted = true
     getRiverInformation(name)
@@ -13,6 +18,7 @@ function RiverInformation({ name }) {
           setRiverInformation(data)
         }
       })
+    // riverInfo()
     return () => {
       mounted = false
     }

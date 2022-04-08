@@ -1,8 +1,8 @@
-import React, {useReducer, useState} from 'react'
+import React, { lazy, Suspense, useReducer, useState } from 'react'
 
 import styled from "styled-components"
 
-import RiverInformation from "../RiverInformation/RiverInformation";
+const RiverInformation = lazy(() => import(/* webpackChunkName: "RiverInformation" */ '../RiverInformation/RiverInformation'))
 
 const AppWrapper = styled.section`
   max-width: 800px;
@@ -22,7 +22,7 @@ const Title = styled.h1`
 
 function App() {
   const [river, setRiver] = useState('nile')
-  const [show, toggle] = useReducer( state => !state, true)
+  const [show, toggle] = useReducer( showing => !showing, true)
   return (
     <AppWrapper>
       <Title>World's Longest Rivers</Title>
@@ -36,9 +36,11 @@ function App() {
       <Button onClick={() => setRiver('yangtze')}>Yangtze</Button>
       <Button onClick={() => setRiver('mississippi')}>Mississippi</Button>
 
-      { show &&
-        <RiverInformation name={river}/>
-      }
+      <Suspense fallback={<div>Loading component ...</div>}>
+        { show &&
+          <RiverInformation name={river}/>
+        }
+      </Suspense>
     </AppWrapper>
   )
 }
