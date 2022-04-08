@@ -1,8 +1,8 @@
-import React, { lazy, Suspense, useReducer, useState } from 'react'
+import React, {useEffect, useRef, useReducer, useState} from 'react'
 
 import styled from "styled-components"
 
-const RiverInformation = lazy(() => import(/* webpackChunkName: "RiverInformation" */ '../RiverInformation/RiverInformation'))
+import { getList, setItem } from "../../services/list"
 
 const AppWrapper = styled.section`
   max-width: 800px;
@@ -14,6 +14,11 @@ const Button = styled.button`
   min-width: 100px;
   padding: 5px 8px;
 `
+const TextInput = styled.input`
+  margin: 10px; 
+  min-width: 100px;
+  padding: 5px 8px;
+`
 const Title = styled.h1`
   text-align:center;
   font-size: 2rem;
@@ -21,26 +26,86 @@ const Title = styled.h1`
 `
 
 function App() {
-  const [river, setRiver] = useState('nile')
-  const [show, toggle] = useReducer( showing => !showing, true)
+  const [alert, setAlert] = useState(false)
+  const [animalInput, setAnimalInput] = useState('')
+  const [list, setList] = useState([])
+  // let mounted = true
+  const mounted = useRef(true)
+
+  useEffect(() => {
+    mounted.current = true
+    if (list.length && !alert) {
+      return
+    }
+    getList()
+      .then(items => {
+        if (mounted || mounted.current ) {
+          setList(items)
+        }
+      })
+    // return () => mounted = false
+    return () => mounted.current = false
+  }, [alert, list])
+
+  useEffect(() => {
+    if (alert) {
+      setTimeout(() => {
+        if (mounted || mounted.current) {
+          setAlert(false)
+        }
+      }, 1000)
+    }
+  }, [alert])
+
+  const handleSubmit = e => {
+    e.preventDefault()
+    setItem(animalInput).then(() => {
+      if (mounted || mounted.current) {
+        setAnimalInput('')
+        setAlert(true)
+      }
+    })
+  }
+
   return (
     <AppWrapper>
-      <Title>World's Longest Rivers</Title>
+      <dl>
+        <p>
+          <dt><kbd>npm i</kbd></dt>
+          <dd> - for install the new dependencies</dd>
+        </p>
+        <p>
+          <dt><kbd>npm start</kbd></dt>
+          <dd>First terminal</dd>
+        </p>
+        <p>
+          <dt><kbd>npm api</kbd></dt>
+          <dd>Second terminal</dd>
+        </p>
+      </dl>
 
-      <div>
-        <Button onClick={ toggle }>Toggle Details</Button>
-      </div>
+      <Title>World's Animals</Title>
 
-      <Button onClick={() => setRiver('nile')}>Nile</Button>
-      <Button onClick={() => setRiver('amazon')}>Amazon</Button>
-      <Button onClick={() => setRiver('yangtze')}>Yangtze</Button>
-      <Button onClick={() => setRiver('mississippi')}>Mississippi</Button>
+      <form onSubmit={handleSubmit}>
+        <fieldset>
+          <label>
+            <h2>Add the New animal</h2>
+            {!alert && <p><mark>{ animalInput }</mark></p>}
+            {alert && <p><mark>Submit Successfully</mark></p>}
+            <TextInput
+              type="text"
+              value={animalInput}
+              onInput={event => setAnimalInput(event.target.value)}
+            />
+          </label>
 
-      <Suspense fallback={<div>Loading component ...</div>}>
-        { show &&
-          <RiverInformation name={river}/>
-        }
-      </Suspense>
+          <Button type="submit">Toggle Details</Button>
+        </fieldset>
+      </form>
+
+      <ul>
+        {list.map(item => <li key={`{item.item}-${item.id}`}>{item.item}</li>)}
+      </ul>
     </AppWrapper>
   )
 }
