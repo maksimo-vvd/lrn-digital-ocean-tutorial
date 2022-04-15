@@ -71,16 +71,19 @@ function App() {
     <AppWrapper>
       <dl>
         <p>
-          <dt><kbd>npm i</kbd></dt>
-          <dd> - for install the new dependencies</dd>
+          <dt>Step 1</dt>
+          <dd>For install the new dependencies</dd>
+          <dd><mark><kbd>&#10074; npm i </kbd></mark></dd>
         </p>
         <p>
-          <dt><kbd>npm start</kbd></dt>
+          <dt>Step 2</dt>
           <dd>First terminal</dd>
+          <dd><mark><kbd>&#10074; npm start</kbd></mark></dd>
         </p>
         <p>
-          <dt><kbd>npm api</kbd></dt>
+          <dt>Step 3</dt>
           <dd>Second terminal</dd>
+          <dd><mark><kbd>&#10074; npm api</kbd></mark></dd>
         </p>
       </dl>
 
