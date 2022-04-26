@@ -1,13 +1,8 @@
-import React, { useState } from 'react'
-import { BrowserRouter, Route, Switch, Link } from 'react-router-dom'
+import React, { useState, useReducer } from 'react'
 
 import styled from "styled-components"
 
-import Dashboard from "../Dashboard/Dashboard";
-import Login from "../Login/Login";
-import Preferences from "../Preferences/Preferences";
-
-import useToken from './useToken'
+import CharacterMap from "../CharacterMap/CharacterMap"
 
 const AppWrapper = styled.section`
   max-width: 800px;
@@ -19,59 +14,14 @@ const Title = styled.h1`
   font-size: 2rem;
   color: #ECC488;
 `
-const List = styled.ul`
-  list-style: none;
-  padding-left: 0;
-  display: flex;
-`
-const Listitem = styled.li`
-  background-color: #B667F1;
-  padding: 1rem;
-  cursor: pointer;
-  
-  &:nth-child(2n) {
-    background-color: #9C51E0;
-  }
-  
-  :hover {
-    background-color: transparent;
-    box-shadow: inset 0 0 0 5px #ECC488; 
-    color: #fff;
-    
-    mark {
-        color: #fff;
-    }
-  }
-`
-
-// function setToken(userToken) {
-//   sessionStorage.setItem('token', JSON.stringify(userToken))
-// }
-// function getToken() {
-//   const tokenString = sessionStorage.getItem('token')
-//   const userToken = JSON.parse(tokenString)
-//   console.log('getToken', userToken?.token)
-//   return userToken?.token
-// }
 
 function App() {
-  // const [token, setToken] = useState()
-  // const token = getToken()
-
-  const {token, setToken} = useToken(true)
-
-  if ( !token ) {
-    return <Login setToken={setToken} />
-  }
-
-  function Logout() {
-    sessionStorage.clear()
-    setToken(token)
-  }
+  const [text, setText] = useState('')
+  const [showExplanation, toggleExplanation] = useReducer(state => !state, false)
 
   return (
     <AppWrapper>
-      <dl>
+      <dl hidden>
         <p>
           <dt>Step 1</dt>
           <dd>For install the new dependencies</dd>
@@ -89,27 +39,29 @@ function App() {
         </p>
       </dl>
 
-      <Title>Add Login Authentication to React Applications</Title>
+      <Title>Avoid Performance Pitfalls in React with memo, useMemo, and useCallback</Title>
 
-      <BrowserRouter>
-        <nav>
-          <List>
-            <Listitem><Link to="/dashboard">Dashboard</Link></Listitem>
-            <Listitem><Link to="/preferences">Preferences</Link></Listitem>
-            <Listitem><button onClick={Logout}>Log Out</button></Listitem>
-          </List>
-        </nav>
+      <label htmlFor="text">
+        <p>Add Your Text Here:</p>
+        <textarea
+           id="text"
+           name="text"
+           rows="10"
+           cols="80"
+           onChange={e => setText(e.target.value)}
+        >
+        </textarea>
+      </label>
 
-        <Switch>
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
+      <div>
+        <button onClick={toggleExplanation}>Show Explanation</button>
+      </div>
+      {showExplanation &&
+         <p>This displays a list of the most common characters.</p>
+      }
 
-          <Route path="/preferences">
-            <Preferences />
-          </Route>
-        </Switch>
-      </BrowserRouter>
+      <CharacterMap text={text}/>
+
     </AppWrapper>
   )
 }
