@@ -6,10 +6,6 @@ import App from './components/App/App';
 
 import { createGlobalStyle } from "styled-components";
 
-import { Provider } from "react-redux";
-import { createStore} from "redux";
-import movieApp from "./store/movies/movies";
-
 const Global = createGlobalStyle`
   * {box-sizing: border-box;}
   body {
@@ -20,26 +16,10 @@ const Global = createGlobalStyle`
   }
 `
 
-const store = createStore(movieApp)
-// const store = createStore(() => ({
-//   movies: [
-//     {
-//       name: 'Black list',
-//       views: 1,
-//     },
-//     {
-//       name: 'Avatar',
-//       views: 100,
-//     },
-//   ],
-// }))
-
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={ store }>
-      <Global />
-      <App />
-    </Provider>
+    <Global />
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
