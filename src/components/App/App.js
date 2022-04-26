@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter, Route, Switch, Link } from 'react-router-dom'
 
 import styled from "styled-components"
 
-import Manatee from "../Manatee/Manatee";
-import Narwhal from "../Narwhal/Narwhal";
-import Whale from "../Whale/Whale";
+import Dashboard from "../Dashboard/Dashboard";
+import Login from "../Login/Login";
+import Preferences from "../Preferences/Preferences";
+
+import useToken from './useToken'
 
 const AppWrapper = styled.section`
   max-width: 800px;
@@ -15,11 +17,6 @@ const AppWrapper = styled.section`
 const Title = styled.h1`
   text-align:center;
   font-size: 2rem;
-  color: #ECC488;
-`
-const Title2 = styled.h2`
-  text-align:center;
-  font-size: 1.75rem;
   color: #ECC488;
 `
 const List = styled.ul`
@@ -47,7 +44,31 @@ const Listitem = styled.li`
   }
 `
 
+// function setToken(userToken) {
+//   sessionStorage.setItem('token', JSON.stringify(userToken))
+// }
+// function getToken() {
+//   const tokenString = sessionStorage.getItem('token')
+//   const userToken = JSON.parse(tokenString)
+//   console.log('getToken', userToken?.token)
+//   return userToken?.token
+// }
+
 function App() {
+  // const [token, setToken] = useState()
+  // const token = getToken()
+
+  const {token, setToken} = useToken(true)
+
+  if ( !token ) {
+    return <Login setToken={setToken} />
+  }
+
+  function Logout() {
+    sessionStorage.clear()
+    setToken(token)
+  }
+
   return (
     <AppWrapper>
       <dl>
@@ -61,33 +82,31 @@ function App() {
           <dd>First terminal</dd>
           <dd><mark><kbd>&#10074; npm start</kbd></mark></dd>
         </p>
+        <p>
+          <dt>Step 3</dt>
+          <dd>Second terminal</dd>
+          <dd><mark><kbd>&#10074; node server.js</kbd></mark></dd>
+        </p>
       </dl>
 
-      <Title>Handle Routing in React Apps with React Router</Title>
-      <Title2>Marine Mammals</Title2>
+      <Title>Add Login Authentication to React Applications</Title>
 
       <BrowserRouter>
         <nav>
           <List>
-            <Listitem><Link to="/manatee">Manatee</Link></Listitem>
-            <Listitem><Link to="/narwhal">Narwhal</Link></Listitem>
-            <Listitem><Link to="/whale">Whale</Link></Listitem>
-            <Listitem><Link to="/whale/beluga">Beluga Whale</Link></Listitem>
-            <Listitem><Link to="/whale/blue">Blue Whale</Link></Listitem>
+            <Listitem><Link to="/dashboard">Dashboard</Link></Listitem>
+            <Listitem><Link to="/preferences">Preferences</Link></Listitem>
+            <Listitem><button onClick={Logout}>Log Out</button></Listitem>
           </List>
         </nav>
 
         <Switch>
-          <Route path="/manatee">
-            <Manatee />
+          <Route path="/dashboard">
+            <Dashboard />
           </Route>
 
-          <Route path="/narwhal">
-            <Narwhal />
-          </Route>
-
-          <Route path="/whale">
-            <Whale />
+          <Route path="/preferences">
+            <Preferences />
           </Route>
         </Switch>
       </BrowserRouter>
