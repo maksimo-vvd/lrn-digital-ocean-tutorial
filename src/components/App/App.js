@@ -72,8 +72,6 @@ function App() {
             <Listitem><Link to="/manatee">Manatee</Link></Listitem>
             <Listitem><Link to="/narwhal">Narwhal</Link></Listitem>
             <Listitem><Link to="/whale">Whale</Link></Listitem>
-            {/*<Listitem><Link to="/whale?type=beluga">Beluga Whale</Link></Listitem>*/}
-            {/*<Listitem><Link to="/whale?type=blue">Blue Whale</Link></Listitem>*/}
             <Listitem><Link to="/whale/beluga">Beluga Whale</Link></Listitem>
             <Listitem><Link to="/whale/blue">Blue Whale</Link></Listitem>
           </List>
@@ -88,18 +86,7 @@ function App() {
             <Narwhal />
           </Route>
 
-          {/* Search library */}
-          {/*<Route path="/whale">*/}
-          {/*  <Whale />*/}
-          {/*</Route>*/}
-
-          {/* Dynamic component. Hook useParams (exact & :type) */}
-
-          <Route exact path="/whale">
-            <Whale />
-          </Route>
-
-          <Route path="/whale/:type">
+          <Route path="/whale">
             <Whale />
           </Route>
         </Switch>
